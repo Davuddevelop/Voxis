@@ -9,6 +9,18 @@ Format: what we decided · why · what we rejected.
 - **Why:** The spec's P0 list is ~17 screens; 5 hours fits the section-5 demo flow, which is what judges see.
 - **Rejected:** Building every P0 screen at low quality.
 
+## 2026-11-06 · Landing page `/`: editorial style, one extra typeface
+- **What:** `/` is a text-led editorial page: hairline rules, numbered sections, serif display headlines over Inter
+  body text. Newsreader (serif) is used for headlines only; Inter stays the face of body text and of every product
+  screen. Icons come from lucide-react (the spec asks for one icon set).
+- **Why:** Spec section 9 wants calm and simple, with no gradients, shadow stacks or stock illustration. An editorial
+  layout fits that, and the serif gives it character without any imagery. The spec has no marketing page, so this
+  departs from "Inter" only here; swapping the face is one token (`--font-serif`).
+- **Kept on purpose:** no link to a screen that does not exist yet (in-page anchors only; add "HR girişi" in M6).
+  The score specimen is labelled "Nümunə" and derived from the real scoring rules (5 of 8 points = 63), not invented.
+  No privacy promises on this page: C-10 is unwritten and the free-tier data question is unresolved.
+- **Rejected:** hero illustration or screenshots (spec forbids stock art; there is no real UI to show yet).
+
 ## 2026-11-06 · Routes follow the UI spec
 - **What:** Candidate `/v/[kod]/...`, HR `/hr/vakansiyalar/...` (spec section 4).
 - **Why:** Spec says only screen IDs are binding, but sharing route names with design keeps one vocabulary.
