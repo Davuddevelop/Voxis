@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Voxis",
-  description: "Səslə müraciət — CV lazım deyil",
+  title: "Voxis — CV lazım deyil",
+  description: "Səslə müraciət: telefonla QR kodu skan edin, suallara cavab verin. HR isə uyğunluğu izahlı görür.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
