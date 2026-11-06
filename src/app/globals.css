@@ -17,8 +17,26 @@
   --color-neutral: #6e7781;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
-  /* Headlines on editorial pages. Georgia is the fallback while the web font loads. */
-  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+
+  /* Landing page only (dark). The accent is the spec's teal, lightened to read on near-black.
+     The status colours keep their spec meaning but are lightened too: the spec's darker green and red
+     fail the contrast rule (WCAG AA) on a dark background. */
+  --color-ink: #080a09;
+  --color-ink-raised: #131517;
+  --color-ink-high: #232326;
+  --color-accent: #5eead4;
+  --color-success-on-dark: #3fb950;
+  --color-warning-on-dark: #d4b144;
+  --color-danger-on-dark: #ff7b72;
+  --color-neutral-on-dark: #9aa4ae;
+}
+
+/* "inline" is required here. These fonts are loaded by the landing layout, so their variables are defined
+   on a wrapper below <html>. A plain @theme token is resolved at the page root, where the variable does not
+   exist yet, and silently falls back. "inline" resolves the variable at the element that uses it. */
+@theme inline {
+  --font-display: var(--font-geist), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 body {
@@ -36,9 +54,42 @@ body {
   background: var(--color-primary-light);
 }
 
-/* In-page links glide, but not for people who asked their system to reduce motion. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+/* The landing page is dark, product screens are light. :has() lets the landing page also paint the area
+   behind it (iOS overscroll, scrollbars) without touching the root layout that every page shares. */
+html:has(.landing-root) {
+  color-scheme: dark;
+  background: var(--color-ink);
+}
+body:has(.landing-root) {
+  background: var(--color-ink);
+  color: #fff;
+}
+.landing-root :focus-visible {
+  outline-color: #fff;
+}
+.landing-root ::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* A faint dot grid behind the hero, fading out towards the edges. */
+.dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(ellipse 60% 70% at 50% 25%, #000 20%, transparent 75%);
+}
+
+/* The grainy light-leak frame. Grey noise is blended over a gradient with "overlay", then contrast pushes
+   the lit areas into speckle. Overlay leaves pure black untouched, so the grain only appears where the
+   gradient has light and fades out into black, which is the dithered look. Used on its own empty layer
+   (never behind text) because filter would also change anything inside it. */
+.grain {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 105% 135% at 100% 0%, #ffffff 0%, #e4eeed 9%, #8a9a97 26%, #36423f 46%, #0d1110 66%, #000 86%);
+  background-size: 200px 200px, auto;
+  background-blend-mode: overlay, normal;
+  /* The mid-stops are deliberately muted: contrast pushes colour towards its extremes, and a saturated
+     teal here turns into neon cyan. Long falloff = a wide band of speckle instead of a hard glow edge. */
+  filter: contrast(185%);
 }

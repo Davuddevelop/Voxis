@@ -9,17 +9,23 @@ Format: what we decided · why · what we rejected.
 - **Why:** The spec's P0 list is ~17 screens; 5 hours fits the section-5 demo flow, which is what judges see.
 - **Rejected:** Building every P0 screen at low quality.
 
-## 2026-11-06 · Landing page `/`: editorial style, one extra typeface
-- **What:** `/` is a text-led editorial page: hairline rules, numbered sections, serif display headlines over Inter
-  body text. Newsreader (serif) is used for headlines only; Inter stays the face of body text and of every product
-  screen. Icons come from lucide-react (the spec asks for one icon set).
-- **Why:** Spec section 9 wants calm and simple, with no gradients, shadow stacks or stock illustration. An editorial
-  layout fits that, and the serif gives it character without any imagery. The spec has no marketing page, so this
-  departs from "Inter" only here; swapping the face is one token (`--font-serif`).
-- **Kept on purpose:** no link to a screen that does not exist yet (in-page anchors only; add "HR girişi" in M6).
-  The score specimen is labelled "Nümunə" and derived from the real scoring rules (5 of 8 points = 63), not invented.
-  No privacy promises on this page: C-10 is unwritten and the free-tier data question is unresolved.
-- **Rejected:** hero illustration or screenshots (spec forbids stock art; there is no real UI to show yet).
+## 2026-11-06 · Landing page `/`: dark and mono-accented, modelled on a reference the owner picked
+- **What:** `/` is near-black (#080A09) with Geist for headlines, Geist Mono for all other text, small pill markers,
+  borderless raised cards and a grainy light-leak frame. Only the structure and look of the reference were used; no
+  wording or images. It lives in its own route group, `src/app/(marketing)/`, with its own fonts.
+- **Departs from the UI spec on purpose:** the spec's design system is light, Inter, no gradients. That still governs
+  the product screens (C-xx, H-xx). The landing page is not a spec screen. The status colours keep their spec meaning
+  but use lightened "on-dark" variants, because the spec's darker green and red fail WCAG AA contrast on near-black.
+- **Why a route group:** Geist loads only for `/`, and `html:has(.landing-root)` paints the page dark (including iOS
+  overscroll) without changing the root layout that every page shares.
+- **Gotcha:** font tokens whose variables come from a nested layout must use `@theme inline`. A plain `@theme` token
+  resolves `var(--font-x)` at the page root, where it does not exist, and silently falls back to the default font.
+  The page looked fine but was in the wrong typeface; only a check of the loaded fonts showed it.
+- **Kept on purpose:** no link to a screen that does not exist yet (in-page anchors only; add "HR girişi" in M6). The
+  score specimen is labelled "Nümunə" and derived from the real scoring rules (5 of 8 points = 63). No privacy
+  promises on this page: C-10 is unwritten and the free-tier data question is unresolved.
+- **Rejected:** a hero photo or screenshot (none exist yet); the reference's rainbow light-leak (too loud for a
+  minimal page, so the grain is white to black with a trace of teal).
 
 ## 2026-11-06 · Routes follow the UI spec
 - **What:** Candidate `/v/[kod]/...`, HR `/hr/vakansiyalar/...` (spec section 4).

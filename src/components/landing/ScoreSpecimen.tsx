@@ -1,12 +1,13 @@
 import { Check, CircleHelp, Contrast, X } from "lucide-react";
 
 // The four result states and their look, from UI spec section 8. Colour never carries meaning alone:
-// every state also has an icon and a word ("Rəng tək başına məna daşımır").
+// every state also has an icon and a word ("Rəng tək başına məna daşımır"). The colours are the
+// lightened "on-dark" variants (see globals.css) so the text passes contrast on the dark card.
 const STATUS = {
-  met: { text: "Uyğundur", Icon: Check, className: "text-success" },
-  partial: { text: "Qismən", Icon: Contrast, className: "text-warning" },
-  not_met: { text: "Uyğun deyil", Icon: X, className: "text-danger" },
-  unknown: { text: "Məlumat yoxdur", Icon: CircleHelp, className: "text-neutral" },
+  met: { text: "Uyğundur", Icon: Check, className: "text-success-on-dark" },
+  partial: { text: "Qismən", Icon: Contrast, className: "text-warning-on-dark" },
+  not_met: { text: "Uyğun deyil", Icon: X, className: "text-danger-on-dark" },
+  unknown: { text: "Məlumat yoxdur", Icon: CircleHelp, className: "text-neutral-on-dark" },
 } as const;
 
 // An illustrative candidate for the demo cashier job (weights 3, 3, 1, 1; total 8). The score is derived,
@@ -21,49 +22,38 @@ const ROWS = [
 
 export function ScoreSpecimen() {
   return (
-    <figure className="max-w-3xl">
-      <figcaption className="mb-8 text-xs font-medium uppercase tracking-[0.14em] text-muted">
+    <figure className="mx-auto w-full max-w-[560px] rounded-lg bg-ink-raised p-5 sm:p-8">
+      <figcaption className="mb-8 text-xs uppercase tracking-[0.08em] text-white/50">
         Nümunə · HR panelində namizədin izahı
       </figcaption>
 
-      <div className="flex items-baseline gap-3 border-b border-border pb-6">
-        <span className="font-serif text-7xl font-light leading-none tracking-[-0.04em] tabular-nums md:text-8xl">
-          63
-        </span>
-        <span className="text-lg text-muted">/ 100</span>
-        <span className="ml-auto text-sm font-medium text-warning">Orta uyğunluq</span>
+      <div className="flex items-baseline gap-3 border-b border-ink-high pb-6">
+        <span className="font-display text-7xl font-medium leading-none tracking-[-0.05em] tabular-nums">63</span>
+        <span className="text-base text-white/50">/ 100</span>
+        <span className="ml-auto text-sm text-warning-on-dark">Orta uyğunluq</span>
       </div>
 
-      <table className="w-full text-left">
-        <caption className="sr-only">Meyarlar üzrə nəticələr</caption>
-        <thead className="sr-only">
-          <tr>
-            <th scope="col">Meyar</th>
-            <th scope="col">Nəticə</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-border">
-          {ROWS.map(({ label, status, note }) => {
-            const { text, Icon, className } = STATUS[status];
-            return (
-              <tr key={label}>
-                <th scope="row" className="py-5 pr-4 align-top font-normal">
-                  <span className="block text-base">{label}</span>
-                  <span className="mt-1 block text-sm italic text-muted">{note}</span>
-                </th>
-                <td className="py-5 text-right align-top">
-                  <span className={`inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium ${className}`}>
-                    <Icon aria-hidden className="size-4" />
-                    {text}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {/* A list, not a table: on a phone each row stacks (label, quote, then result) instead of squeezing
+          three columns into 270px. Each item still reads in order for a screen reader. */}
+      <ul className="divide-y divide-ink-high">
+        {ROWS.map(({ label, status, note }) => {
+          const { text, Icon, className } = STATUS[status];
+          return (
+            <li key={label} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+              <div>
+                <p className="font-display text-base tracking-[-0.02em]">{label}</p>
+                <p className="mt-1 text-xs leading-5 text-white/50">{note}</p>
+              </div>
+              <span className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm ${className}`}>
+                <Icon aria-hidden className="size-4" />
+                {text}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
 
-      <p className="mt-6 border-t border-border pt-6 text-sm text-muted">
+      <p className="border-t border-ink-high pt-5 text-xs text-white/50">
         Süni intellekt yalnız tövsiyə edir — son qərar sizindir.
       </p>
     </figure>
