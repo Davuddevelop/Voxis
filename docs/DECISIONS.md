@@ -170,3 +170,13 @@ Format: what we decided · why · what we rejected.
   Chromium's fake microphone. Real accuracy will be lower than the 0.5% / 4-of-5 measured here.
 - Rate limiter is per serverless instance (a speed bump, not a guarantee). Audio is not stored (HR sees transcripts).
 - H-04 is one form, not a 4-step wizard. Reject reasons are not stored. Invite/reject messages are drafted, never sent.
+
+## Stage demo: a one-tap private login instead of removing the login
+- **Asked for:** skip login steps for a 90-second pitch. **Done:** `/hr/demo?k=<key>` signs the presenter in and lands on the
+  demo job. **Not done on purpose:** an HR page open to everyone. Judges type real phone numbers into the app; a public
+  HR page would show them to anyone with the address.
+- **How:** the key is HMAC(HR_SESSION_SECRET, "fixed-key:demo-login"): no new setting, and changing the secret revokes
+  the link. Wrong or missing key answers 404, rate-limited. Cost: the link is a bearer secret; keep it off the screen.
+- **Also for the stage:** a seeded job at /v/demo with 2 questions (about 20 s to answer) and 3 sample candidates (named
+  "(nümunə)", scored by the real scoreProfile), a job page that refreshes itself every 4 s, a full-screen QR page, and
+  HR's priorities shown on the job page. Script and checklist: docs/DEMO.md. Seeding: `npm run seed:demo`.

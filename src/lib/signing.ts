@@ -46,3 +46,15 @@ export async function checkToken(secret: string, payload: unknown, token: string
   // subtle.verify compares in constant time, so a wrong signature does not leak how much of it was right.
   return crypto.subtle.verify("HMAC", await importKey(secret), signature, encoder.encode(`${issuedAt}.${stableStringify(payload)}`));
 }
+
+// A permanent key derived from a secret: HMAC(secret, label) as hex. It powers the stage "demo login" link, so no new
+// setting is needed, and changing the secret instantly revokes every such link.
+export async function fixedKey(secret: string, label: string): Promise<string> {
+  return toHex(await crypto.subtle.sign("HMAC", await importKey(secret), encoder.encode(`fixed-key:${label}`)));
+}
+
+export async function checkFixedKey(secret: string, label: string, candidate: string): Promise<boolean> {
+  const signature = fromHex(candidate);
+  if (!signature) return false;
+  return crypto.subtle.verify("HMAC", await importKey(secret), signature, encoder.encode(`fixed-key:${label}`));
+}

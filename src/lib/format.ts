@@ -2,7 +2,7 @@
 
 // "Aysel Məmmədova" -> "AM". Spec: candidates have no photo, only initials.
 export function initials(name: string): string {
-  const letters = name.trim().split(/\s+/).slice(0, 2).map((word) => [...word][0] ?? "");
+  const letters = name.split(/\s+/).filter((word) => /\p{L}/u.test(word)).slice(0, 2).map((word) => [...word.replace(/^[^\p{L}]+/u, "")][0] ?? "");
   return letters.join("").toLocaleUpperCase("az") || "?";
 }
 

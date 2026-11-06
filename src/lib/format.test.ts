@@ -8,6 +8,8 @@ describe("initials", () => {
     expect(initials("  ilkin  ")).toBe("İ"); // i -> İ, not I
     expect(initials("Əli Vəliyev Oğlu")).toBe("ƏV");
     expect(initials("")).toBe("?");
+    expect(initials("Aysel M. (nümunə)")).toBe("AM");
+    expect(initials("· (Rəşad)")).toBe("R"); // punctuation is never an initial
   });
 });
 

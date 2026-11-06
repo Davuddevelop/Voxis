@@ -1,14 +1,15 @@
 import { ExternalLink } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import QRCode from "qrcode";
 import { JOB_STATUS_CLASS, JOB_STATUS_TEXT, ScoreBadge, StatusBadge } from "@/components/hr/Badges";
+import { AutoRefresh } from "@/components/hr/AutoRefresh";
 import { CandidatePanel } from "@/components/hr/CandidatePanel";
 import { CopyButton, JobStatusButtons } from "@/components/hr/ClientButtons";
 import { CriterionChip } from "@/components/hr/CriterionChip";
 import { getJob, listApplications, setApplicationStatus, type ApplicationRow, type ApplicationStatus } from "@/lib/db";
 import { initials, timeAgo } from "@/lib/format";
+import { siteOrigin } from "@/lib/origin";
 
 // Spec H-05 (QR and link) + H-06 (ranked candidates) + H-07 (side panel, opened by ?namized=<id>).
 const TABS: { key: "all" | ApplicationStatus; text: string }[] = [
@@ -45,14 +46,12 @@ export default async function JobPage(props: PageProps<"/hr/vakansiyalar/[id]">)
     return `/hr/vakansiyalar/${job.id}${params.size ? `?${params}` : ""}`;
   };
 
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const link = `${protocol}://${host}/v/${job.slug}`;
+  const link = `${await siteOrigin()}/v/${job.slug}`;
   const qr = await QRCode.toString(link, { type: "svg", margin: 1, width: 176, color: { dark: "#1F2328", light: "#FFFFFF" } });
 
   return (
     <>
+      <AutoRefresh />
       <Link href="/hr/vakansiyalar" className="text-sm text-muted hover:text-text">← Vakansiyalar</Link>
 
       <div className="mb-6 mt-2 flex flex-wrap items-start justify-between gap-4">
@@ -66,6 +65,16 @@ export default async function JobPage(props: PageProps<"/hr/vakansiyalar/[id]">)
         <JobStatusButtons jobId={job.id} status={job.status} />
       </div>
 
+      <section aria-label="Meyarlar və prioritetlər" className="mb-6 flex flex-wrap items-center gap-2" data-testid="H-06-criteria">
+        <span className="text-sm font-medium text-muted">Meyarlar (prioritet):</span>
+        {[...job.criteria].sort((a, b) => b.priority - a.priority).map((c) => (
+          <span key={c.id} className="inline-flex items-center gap-2 rounded-full border border-border bg-background py-1 pl-1 pr-3 text-sm">
+            <span className="grid size-6 place-items-center rounded-full bg-primary text-xs font-semibold text-white">{c.priority}</span>
+            {c.label}
+          </span>
+        ))}
+      </section>
+
       <section aria-label="QR kod və paylaşım" className="mb-8 grid gap-6 rounded-xl border border-border bg-background p-6 md:grid-cols-[auto_1fr]" data-testid="H-05">
         {/* The SVG is generated here from our own URL, never from user input, so inlining it is safe. */}
         <div className="size-44 overflow-hidden rounded-lg border border-border" role="img" aria-label="Vakansiya QR kodu" dangerouslySetInnerHTML={{ __html: qr }} />
@@ -76,6 +85,7 @@ export default async function JobPage(props: PageProps<"/hr/vakansiyalar/[id]">)
           <div className="flex flex-wrap gap-2">
             <CopyButton text={link} label="Linki kopyala" testId="H-05-B1" />
             <a href={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(qr)}`} download={`voxis-${job.slug}.svg`} data-testid="H-05-B2" className="inline-flex min-h-10 items-center rounded-lg border border-border px-3 text-sm hover:bg-surface">QR yüklə (SVG)</a>
+            <a href={`/hr/qr/${job.id}`} target="_blank" rel="noreferrer" data-testid="H-05-B3" className="inline-flex min-h-10 items-center rounded-lg border border-border px-3 text-sm hover:bg-surface">Tam ekran QR</a>
             <a href={`/v/${job.slug}`} target="_blank" rel="noreferrer" data-testid="H-05-B5" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border px-3 text-sm hover:bg-surface"><ExternalLink aria-hidden className="size-4" />Namizəd kimi bax</a>
           </div>
         </div>

@@ -39,3 +39,17 @@ describe("signed tokens", () => {
     expect(await checkToken(SECRET, payload, token, HOUR, now - 1)).toBe(false);
   });
 });
+
+describe("fixed keys (the stage demo link)", () => {
+  it("are repeatable, verify, and break when the secret, the label or a single character changes", async () => {
+    const { fixedKey, checkFixedKey } = await import("./signing");
+    const key = await fixedKey(SECRET, "demo-login");
+    expect(key).toMatch(/^[0-9a-f]{64}$/);
+    expect(await fixedKey(SECRET, "demo-login")).toBe(key);
+    expect(await checkFixedKey(SECRET, "demo-login", key)).toBe(true);
+    expect(await checkFixedKey("another-secret-another-secret-0000", "demo-login", key)).toBe(false);
+    expect(await checkFixedKey(SECRET, "something-else", key)).toBe(false);
+    expect(await checkFixedKey(SECRET, "demo-login", key.slice(0, -1) + (key.endsWith("0") ? "1" : "0"))).toBe(false);
+    for (const junk of ["", "zz", "abc", "0".repeat(63)]) expect(await checkFixedKey(SECRET, "demo-login", junk)).toBe(false);
+  });
+});
