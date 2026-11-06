@@ -67,3 +67,17 @@ export function questionsForCriteria(criteria: readonly Criterion[]): JobQuestio
     fields: [...(fieldsByQuestion.get(key) ?? [])],
   }));
 }
+
+// The sentence HR sees in the list for a criterion, when HR did not word it themselves.
+export function defaultCriterionLabel(field: ProfileField, value?: number | string[]): string {
+  switch (field) {
+    case "experience_months":
+      return `Ən azı ${value} ay təcrübə`;
+    case "available_within_days":
+      return value === 0 ? "Dərhal işə başlaya bilər" : `${value} gün ərzində işə başlaya bilər`;
+    case "languages":
+      return `Dil: ${(Array.isArray(value) ? value : []).map((code) => LANGUAGE_OPTIONS.find((l) => l.code === code)?.label ?? code).join(", ")}`;
+    default:
+      return FIELD_CATALOG[field].defaultLabel;
+  }
+}
