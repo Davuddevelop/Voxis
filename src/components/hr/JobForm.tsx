@@ -127,7 +127,7 @@ export function JobForm() {
                 <span className="text-sm font-medium">Prioritet</span>
                 <div role="group" aria-label="Prioritet" className="flex items-center gap-2" data-testid="H-04-B10">
                   {[1, 2, 3, 4, 5].map((p) => (
-                    <button key={p} type="button" aria-pressed={row.priority === p} onClick={() => update(row.key, { priority: p })} className={`size-11 rounded-lg border text-base tabular-nums ${row.priority === p ? "border-primary bg-primary font-semibold text-white" : "border-border hover:bg-surface"}`}>{p}</button>
+                    <button key={p} type="button" aria-pressed={row.priority === p} onClick={() => update(row.key, { priority: p })} className={`size-11 rounded-lg border text-base tabular-nums ${row.priority === p ? "border-primary bg-primary font-semibold text-ink" : "border-border hover:bg-surface"}`}>{p}</button>
                   ))}
                   <span className="ml-2 text-sm text-muted">{PRIORITY_HINT[row.priority]}</span>
                 </div>
@@ -164,7 +164,7 @@ export function JobForm() {
 
       {error && <p role="alert" data-testid="H-04-error" className="rounded-lg border border-danger/30 bg-danger/5 p-3 text-sm text-danger">{error}</p>}
       <div className="sticky bottom-0 -mx-1 flex justify-end border-t border-border bg-surface/95 px-1 py-4 backdrop-blur">
-        <button type="submit" disabled={busy} data-testid="H-04-B6" className="min-h-12 rounded-lg bg-primary px-6 text-base font-medium text-white hover:bg-primary-hover disabled:bg-border disabled:text-muted">
+        <button type="submit" disabled={busy} data-testid="H-04-B6" className="min-h-12 rounded-lg bg-primary px-6 text-base font-medium text-ink hover:bg-primary-hover disabled:bg-border disabled:text-muted">
           {busy ? "Yaradılır…" : "Dərc et və QR yarat"}
         </button>
       </div>

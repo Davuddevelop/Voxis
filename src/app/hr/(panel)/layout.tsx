@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "HR paneli — Voxis", robots: { inde
 export default async function PanelLayout({ children }: { children: ReactNode }) {
   if (!(await isHr())) redirect("/hr/giris");
   return (
-    <div className="min-h-dvh bg-surface">
+    <div className="min-h-dvh bg-page">
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6">
           <div className="flex items-center gap-8">

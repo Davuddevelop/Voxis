@@ -52,14 +52,14 @@ export function DecisionActions({ applicationId, status, name, company, jobTitle
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        {status !== "interview" && status !== "accepted" && <button type="button" onClick={() => open("invite")} disabled={busy} data-testid="H-07-B11" className={`${button} bg-primary text-white hover:bg-primary-hover`}>Müsahibəyə dəvət et</button>}
-        {status === "interview" && <button type="button" onClick={() => setStatus("accepted")} disabled={busy} className={`${button} bg-success text-white`}>Qəbul et</button>}
+        {status !== "interview" && status !== "accepted" && <button type="button" onClick={() => open("invite")} disabled={busy} data-testid="H-07-B11" className={`${button} bg-primary text-ink hover:bg-primary-hover`}>Müsahibəyə dəvət et</button>}
+        {status === "interview" && <button type="button" onClick={() => setStatus("accepted")} disabled={busy} className={`${button} bg-success text-ink`}>Qəbul et</button>}
         {status !== "rejected" && <button type="button" onClick={() => open("reject")} disabled={busy} data-testid="H-07-B12" className={`${button} border border-danger/40 text-danger hover:bg-danger/5`}>İmtina et</button>}
         {(status === "interview" || status === "accepted" || status === "rejected") && <button type="button" onClick={() => setStatus("viewed")} disabled={busy} data-testid="H-07-B14" className={`${button} text-muted hover:bg-surface`}>Qərarı geri al</button>}
       </div>
 
       {mode && (
-        <div role="dialog" aria-modal="true" aria-label={mode === "invite" ? "Müsahibəyə dəvət" : "İmtina"} className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4" onKeyDown={(e) => e.key === "Escape" && setMode(null)}>
+        <div role="dialog" aria-modal="true" aria-label={mode === "invite" ? "Müsahibəyə dəvət" : "İmtina"} className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onKeyDown={(e) => e.key === "Escape" && setMode(null)}>
           <div className="w-full max-w-lg rounded-2xl bg-background p-6 shadow-lg">
             <div className="mb-4 flex items-start justify-between gap-4">
               <h2 className="text-lg font-semibold">{mode === "invite" ? `${name} müsahibəyə dəvət` : `${name} üçün imtina`}</h2>
@@ -89,7 +89,7 @@ export function DecisionActions({ applicationId, status, name, company, jobTitle
             <div className="mt-5 flex justify-end gap-2">
               <CopyButton text={message} label="Mesajı kopyala" />
               <button type="button" onClick={() => setMode(null)} className={`${button} text-muted hover:bg-surface`}>Ləğv et</button>
-              <button type="button" disabled={busy} onClick={() => setStatus(mode === "invite" ? "interview" : "rejected")} data-testid={mode === "invite" ? "H-08-B1" : "H-09-B1"} className={`${button} ${mode === "invite" ? "bg-primary text-white" : "bg-danger text-white"}`}>
+              <button type="button" disabled={busy} onClick={() => setStatus(mode === "invite" ? "interview" : "rejected")} data-testid={mode === "invite" ? "H-08-B1" : "H-09-B1"} className={`${button} ${mode === "invite" ? "bg-primary text-ink" : "bg-danger text-ink"}`}>
                 {mode === "invite" ? "Statusu dəyiş" : "İmtina et"}
               </button>
             </div>

@@ -73,7 +73,7 @@ export async function JobBoard({ jobId, query, base, embedded = false }: Props) 
         <span className="text-sm font-medium text-muted">Meyarlar (prioritet):</span>
         {[...job.criteria].sort((a, b) => b.priority - a.priority).map((c) => (
           <span key={c.id} className="inline-flex items-center gap-2 rounded-full border border-border bg-background py-1 pl-1 pr-3 text-sm">
-            <span className="grid size-6 place-items-center rounded-full bg-primary text-xs font-semibold text-white">{c.priority}</span>
+            <span className="grid size-6 place-items-center rounded-full bg-primary text-xs font-semibold text-ink">{c.priority}</span>
             {c.label}
           </span>
         ))}
@@ -100,7 +100,7 @@ export async function JobBoard({ jobId, query, base, embedded = false }: Props) 
       {!embedded && (
         <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Status">
           {TABS.map((t) => (
-            <Link key={t.key} role="tab" aria-selected={tab === t.key} href={t.key === "all" ? home : `${home}?status=${t.key}`} data-testid="H-06-B4" className={`rounded-full px-4 py-1.5 text-sm ${tab === t.key ? "bg-primary font-medium text-white" : "bg-background text-muted hover:bg-primary-light"}`}>
+            <Link key={t.key} role="tab" aria-selected={tab === t.key} href={t.key === "all" ? home : `${home}?status=${t.key}`} data-testid="H-06-B4" className={`rounded-full px-4 py-1.5 text-sm ${tab === t.key ? "bg-primary font-medium text-ink" : "bg-background text-muted hover:bg-primary-light"}`}>
               {t.text} <span className="tabular-nums opacity-80">{count(t.key)}</span>
             </Link>
           ))}
@@ -127,7 +127,7 @@ export async function JobBoard({ jobId, query, base, embedded = false }: Props) 
                     <Link href={hrefFor({ namized: a.id })} className="flex items-center gap-3 after:absolute after:inset-0">
                       <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full bg-primary-light text-xs font-semibold text-primary">{initials(a.candidate_name)}</span>
                       <span className={a.status === "new" ? "font-semibold" : ""}>{a.candidate_name}</span>
-                      {a.status === "new" && <span aria-label="Yeni" className="size-2 rounded-full bg-blue-600" />}
+                      {a.status === "new" && <span aria-label="Yeni" className="size-2 rounded-full bg-blue-400" />}
                     </Link>
                   </td>
                   <td className="px-4 py-4"><ScoreBadge score={a.score} band={a.band} /></td>

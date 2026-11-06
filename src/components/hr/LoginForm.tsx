@@ -38,7 +38,7 @@ export function LoginForm({ next = "/hr/vakansiyalar" }: { next?: string }) {
           </button>
         </span>
       </label>
-      <button type="submit" disabled={busy || !email || !password} data-testid="H-01-B1" className="min-h-12 rounded-lg bg-primary px-4 text-base font-medium text-white hover:bg-primary-hover disabled:bg-border disabled:text-muted">
+      <button type="submit" disabled={busy || !email || !password} data-testid="H-01-B1" className="min-h-12 rounded-lg bg-primary px-4 text-base font-medium text-ink hover:bg-primary-hover disabled:bg-border disabled:text-muted">
         {busy ? "Yoxlanılır…" : "Daxil ol"}
       </button>
     </form>
