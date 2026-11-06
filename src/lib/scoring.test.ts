@@ -3,12 +3,12 @@ import type { Criterion, Profile } from "./schema";
 import { bandFor, scoreProfile } from "./scoring";
 import type { CriterionStatus, ScoreBand } from "./scoring";
 
-// The demo cashier job. Weights: exp 3 + shifts 3 + weekends 1 + ru 1 = 8.
+// The demo cashier job. Priorities (= weights): exp 3 + shifts 3 + weekends 1 + ru 1 = 8.
 const CASHIER_JOB: Criterion[] = [
-  { id: "exp", label: "Ən azı 6 ay təcrübə", field: "experience_months", op: "number_gte", value: 6, importance: "required" },
-  { id: "shifts", label: "Növbəli işləyə bilər", field: "can_work_shifts", op: "bool_true", importance: "required" },
-  { id: "weekends", label: "Həftəsonu işləyə bilər", field: "can_work_weekends", op: "bool_true", importance: "preferred" },
-  { id: "ru", label: "Rus dili", field: "languages", op: "in_list", value: ["ru"], importance: "preferred" },
+  { id: "exp", label: "Ən azı 6 ay təcrübə", field: "experience_months", op: "number_gte", value: 6, priority: 3 },
+  { id: "shifts", label: "Növbəli işləyə bilər", field: "can_work_shifts", op: "bool_true", priority: 3 },
+  { id: "weekends", label: "Həftəsonu işləyə bilər", field: "can_work_weekends", op: "bool_true", priority: 1 },
+  { id: "ru", label: "Rus dili", field: "languages", op: "in_list", value: ["ru"], priority: 1 },
 ];
 
 // Meets every criterion. Each test overrides only the fields it is about.
@@ -17,6 +17,8 @@ const STRONG: Profile = {
   can_work_shifts: true,
   can_work_weekends: true,
   languages: ["az", "ru"],
+  has_driving_license: true,
+  available_within_days: 0,
   evidence: {},
 };
 const candidate = (overrides: Partial<Profile>): Profile => ({ ...STRONG, ...overrides });
@@ -93,7 +95,7 @@ describe("scoreProfile: refuses broken setups instead of guessing", () => {
 
   it("throws when a number_gte threshold is 0 (division by zero would leak NaN into rankings)", () => {
     const broken: Criterion[] = [
-      { id: "exp", label: "x", field: "experience_months", op: "number_gte", value: 0, importance: "required" },
+      { id: "exp", label: "x", field: "experience_months", op: "number_gte", value: 0, priority: 3 },
     ];
     expect(() => scoreProfile(STRONG, broken)).toThrow();
   });
@@ -126,5 +128,36 @@ describe("bandFor: boundaries from the spec (75-100 high, 50-74 medium, 0-49 low
     [0, "low"],
   ])("%i -> %s", (score, band) => {
     expect(bandFor(score)).toBe(band);
+  });
+});
+
+describe("scoreProfile: priorities 1-5 and the other operations", () => {
+  const job = (...cs: Criterion[]) => cs;
+  const lic: Criterion = { id: "lic", label: "Vəsiqə", field: "has_driving_license", op: "bool_true", priority: 5 };
+  const soon: Criterion = { id: "soon", label: "7 gün ərzində", field: "available_within_days", op: "number_lte", value: 7, priority: 2 };
+
+  it("uses the priority as the weight (5 and 2 -> total 7)", () => {
+    const { score, breakdown } = scoreProfile(candidate({ has_driving_license: true, available_within_days: 30 }), job(lic, soon));
+    expect(breakdown.map((r) => r.weight)).toEqual([5, 2]);
+    expect(score).toBe(71); // 5 of 7 points: license met, start date too late
+  });
+
+  it("number_lte: met at the limit, not met above it, unknown when not mentioned", () => {
+    const status = (days: number | null) => scoreProfile(candidate({ available_within_days: days }), job(lic, soon)).breakdown[1]?.status;
+    expect([status(0), status(7), status(8), status(null)]).toEqual(["met", "met", "not_met", "unknown"]);
+  });
+
+  it("bool_true works for the driving license, and false is an answer (not_met), null is unknown", () => {
+    const status = (v: boolean | null) => scoreProfile(candidate({ has_driving_license: v }), job(lic, soon)).breakdown[0]?.status;
+    expect([status(true), status(false), status(null)]).toEqual(["met", "not_met", "unknown"]);
+  });
+
+  it("a critical criterion (5) moves the score more than a nice-to-have (1)", () => {
+    const twoCriteria = (priorityOfFirst: number) => [
+      { ...lic, priority: priorityOfFirst },
+      { ...soon, priority: 1 },
+    ];
+    const missesFirst = (p: number) => scoreProfile(candidate({ has_driving_license: false, available_within_days: 0 }), twoCriteria(p)).score;
+    expect(missesFirst(5)).toBeLessThan(missesFirst(1));
   });
 });
