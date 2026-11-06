@@ -1,20 +1,24 @@
 @import "tailwindcss";
 
-/* Design tokens from the UI spec, section 9. Use as bg-primary, text-muted, etc.
-   Colour meanings are fixed by the spec (e.g. warning = "Qismən" / last 10 seconds). */
+/* Design tokens. Use as bg-primary, text-muted, etc. The NAMES and MEANINGS come from the UI spec, section 9 (e.g. warning =
+   "Qismən" / last 10 seconds); the VALUES are now dark, taken from the owner's design: three layers (page < card < inset),
+   a warm off-white text and a softer teal. Because primary/success/danger are now light colours, a button filled with them
+   carries dark text (text-ink), not white. The status colours are the same ones the landing already used on dark, which
+   were chosen to pass WCAG AA contrast. */
 @theme {
-  --color-primary: #0f766e;
-  --color-primary-hover: #115e59;
-  --color-primary-light: #e6f2f1;
-  --color-text: #1f2328;
-  --color-muted: #5b6470;
-  --color-border: #d8dee4;
-  --color-surface: #f6f8fa;
-  --color-background: #ffffff;
-  --color-success: #1a7f37;
-  --color-warning: #9a6700;
-  --color-danger: #cf222e;
-  --color-neutral: #6e7781;
+  --color-page: #070909;
+  --color-background: #0d1111;
+  --color-surface: #111516;
+  --color-border: #2b3132;
+  --color-text: #f1f1ed;
+  --color-muted: #929a99;
+  --color-primary: #67c6bc;
+  --color-primary-hover: #7fd3ca;
+  --color-primary-light: #12302d;
+  --color-success: #3fb950;
+  --color-warning: #d4b144;
+  --color-danger: #ff7b72;
+  --color-neutral: #9aa4ae;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
@@ -40,8 +44,12 @@
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
+/* color-scheme tells the browser to draw its own controls (audio player, checkboxes, scrollbars, date picker) dark too. */
+:root {
+  color-scheme: dark;
+}
 body {
-  background: var(--color-background);
+  background: var(--color-page);
   color: var(--color-text);
 }
 
@@ -121,7 +129,7 @@ body:has(.landing-root) {
 }
 /* A candidate who just arrived in the HR list flashes once so the eye finds the new row. */
 @keyframes flash {
-  0% { background-color: rgb(94 234 212 / 0.5); }
+  0% { background-color: rgb(103 198 188 / 0.22); }
   100% { background-color: transparent; }
 }
 .new-row { animation: flash 2.6s ease-out; }

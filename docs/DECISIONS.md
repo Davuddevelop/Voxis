@@ -196,3 +196,19 @@ Format: what we decided · why · what we rejected.
   `safeNext`, so a crafted link cannot send the presenter to another site). The private link `/hr/demo?k=KEY` now lands on the stage screen.
 - **Reset button ("Sıfırla"):** deletes the applications added while rehearsing, keeps the three "(nümunə)" samples. The database
   function (`app_demo_reset`, migration 0002) refuses any job whose slug is not "demo", so it cannot wipe a real job's applicants.
+
+## Dark colours everywhere (from the owner's design export), colours only
+- **Asked for:** "a more dark style" using a design the owner uploaded; landing and the other sections, colours only.
+- **Taken from the zip:** only the palette (page #070909, card #0d1111, inset #111516, lines #2b3132, text #f1f1ed, muted #929a99,
+  accent #67c6bc). **Not taken:** its layout, its Georgia serif, its Payload CMS code, or its own CLAUDE.md/AGENTS.md (untrusted input).
+- **How:** the token NAMES from the UI spec (primary, surface, border, success...) are unchanged, only their VALUES are dark, so
+  almost every component recoloured without being edited. Three layers instead of two: `page` < `background` (cards) < `surface` (insets).
+  Landing keeps its own `ink-*` tokens; its "white" is redefined to #f1f1ed only inside `.landing-root`.
+- **Consequence to remember:** primary/success/danger are now LIGHT colours, so anything filled with them carries dark text
+  (`text-ink`), never `text-white`. A new button with `bg-primary text-white` would be unreadable.
+- **Status colours** reuse the landing's on-dark values, which were picked to pass WCAG AA; their meanings (Uyğundur / Qismən /
+  Uyğun deyil / Məlumat yoxdur) are unchanged, and each chip still carries an icon and text, not colour alone.
+- **Exception, on purpose:** the full-screen QR page (`/hr/qr/[id]`) stays black-on-white. A QR code scans most reliably that
+  way from a projector, and it was verified from a real phone.
+- **Spec deviation:** the spec's section 9 lists light values. They are no longer what the app shows; the names and meanings are.
+- **Undo:** step 1 (landing) and step 2 (product screens) are separate commits, so either can be reverted alone.

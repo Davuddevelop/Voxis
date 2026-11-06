@@ -16,7 +16,7 @@ export default async function StagePage() {
 
   if (!job) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-surface p-6 text-center">
+      <main className="grid min-h-dvh place-items-center bg-page p-6 text-center">
         <div>
           <h1 className="text-2xl font-semibold">Demo vakansiyası tapılmadı</h1>
           <p className="mt-2 text-muted">Terminalda işə salın: <code className="rounded bg-background px-2 py-1">npm run seed:demo</code></p>
@@ -27,7 +27,7 @@ export default async function StagePage() {
 
   const label = "text-sm font-semibold uppercase tracking-wide text-muted";
   return (
-    <main className="flex h-dvh flex-col bg-neutral-100 text-text">
+    <main className="flex h-dvh flex-col bg-page text-text">
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
         <span className="flex items-center gap-2.5 font-semibold"><Logo size={26} decorative />Voxis <span className="font-normal text-muted">· canlı demo</span></span>
         <nav aria-label="Demo alətləri" className="flex items-center gap-2">
@@ -41,9 +41,9 @@ export default async function StagePage() {
         <section aria-label="Namizəd tərəfi" className="flex min-h-0 flex-col gap-3">
           <h2 className={label}>1 · Namizəd (telefon)</h2>
           <div className="flex min-h-0 flex-1 justify-center">
-            <div className="phone-frame overflow-hidden rounded-[2.6rem] border-[10px] border-neutral-900 bg-neutral-900 shadow-2xl">
+            <div className="phone-frame overflow-hidden rounded-[2.6rem] border-[10px] border-ink-high bg-ink-high shadow-2xl">
               {/* allow="microphone": without it a browser may refuse recording inside a frame */}
-              <iframe src={`/v/${job.slug}`} title="Namizəd" allow="microphone" className="size-full border-0 bg-white" />
+              <iframe src={`/v/${job.slug}`} title="Namizəd" allow="microphone" className="size-full border-0 bg-page" />
             </div>
           </div>
         </section>

@@ -12,7 +12,7 @@ export function CandidatePanel({ application: a, job, closeHref }: { application
   const bandColor = { high: "text-success", medium: "text-warning", low: "text-neutral" }[a.band];
   return (
     <>
-      <Link href={closeHref} aria-label="Paneli bağla" className="fixed inset-0 z-30 bg-black/20" />
+      <Link href={closeHref} aria-label="Paneli bağla" className="fixed inset-0 z-30 bg-black/50" />
       <aside aria-label="Namizəd paneli" data-testid="H-07" className="fixed inset-y-0 right-0 z-40 flex w-full max-w-[560px] flex-col border-l border-border bg-background shadow-2xl">
         <div className="flex items-center gap-4 border-b border-border px-6 py-4">
           <span aria-hidden className="grid size-11 place-items-center rounded-full bg-primary-light font-semibold text-primary">{initials(a.candidate_name)}</span>

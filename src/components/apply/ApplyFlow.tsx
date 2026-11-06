@@ -156,7 +156,7 @@ export function ApplyFlow({ job }: { job: PublicJob }) {
   const back = step === "consent" ? () => setStep("intro") : step === "mic" ? () => setStep("consent") : null;
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 text-text">
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-page px-5 text-text">
       <header className="sticky top-0 z-10 -mx-5 bg-background/95 px-5 pt-3 backdrop-blur">
         <div className="flex h-12 items-center justify-between">
           {back ? (
@@ -467,9 +467,9 @@ function QuestionStep({ question, index, total, stream, typedMode, transcribe, o
                 }}
                 aria-label={recorder.phase === "recording" ? "Dayandır" : "Yazmağa başla"}
                 data-testid={recorder.phase === "recording" ? "C-04-B2" : "C-04-B1"}
-                className={`grid size-24 place-items-center rounded-full text-white transition-colors ${recorder.phase === "recording" ? "animate-pulse bg-danger" : "bg-primary hover:bg-primary-hover"}`}
+                className={`grid size-24 place-items-center rounded-full text-ink transition-colors ${recorder.phase === "recording" ? "animate-pulse bg-danger" : "bg-primary hover:bg-primary-hover"}`}
               >
-                {recorder.phase === "recording" ? <Square aria-hidden className="size-9 fill-white" /> : <Mic aria-hidden className="size-10" />}
+                {recorder.phase === "recording" ? <Square aria-hidden className="size-9 fill-ink" /> : <Mic aria-hidden className="size-10" />}
               </button>
               <p className={`text-lg tabular-nums ${warn ? "font-medium text-warning" : "text-muted"}`} data-testid="C-04-timer">
                 {formatClock(recorder.seconds)} / {formatClock(MAX_SECONDS)}

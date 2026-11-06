@@ -10,7 +10,7 @@ export default async function EmbeddedBoard(props: PageProps<"/hr/embed/[id]">) 
   if (!(await isHr())) redirect("/hr/giris");
   const { id } = await props.params;
   return (
-    <div className="min-h-dvh bg-surface px-5 py-5">
+    <div className="min-h-dvh bg-page px-5 py-5">
       <JobBoard jobId={id} query={await props.searchParams} base="/hr/embed" embedded />
     </div>
   );

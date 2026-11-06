@@ -11,7 +11,7 @@ export default async function LoginPage(props: PageProps<"/hr/giris">) {
   const next = safeNext((await props.searchParams).next);
   if (await isHr()) redirect(next);
   return (
-    <main className="grid min-h-dvh place-items-center bg-surface px-6">
+    <main className="grid min-h-dvh place-items-center bg-page px-6">
       <div className="w-full max-w-sm rounded-2xl border border-border bg-background p-8">
         <p className="mb-6 flex items-center gap-2 font-semibold"><Logo size={32} decorative />Voxis</p>
         <h1 className="mb-6 text-2xl font-semibold">HR panelinə giriş</h1>

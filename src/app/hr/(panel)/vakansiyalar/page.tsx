@@ -10,7 +10,7 @@ export default async function JobsPage() {
     <>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Vakansiyalar</h1>
-        <Link href="/hr/vakansiyalar/yeni" data-testid="H-03-B1" className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-white hover:bg-primary-hover">
+        <Link href="/hr/vakansiyalar/yeni" data-testid="H-03-B1" className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-ink hover:bg-primary-hover">
           <Plus aria-hidden className="size-4" /> Yeni vakansiya
         </Link>
       </div>
@@ -35,7 +35,7 @@ export default async function JobsPage() {
                   <td className="px-4 py-4 text-muted">{job.location || "—"}</td>
                   <td className="px-4 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-medium ${JOB_STATUS_CLASS[job.status]}`}>{JOB_STATUS_TEXT[job.status]}</span></td>
                   <td className="px-4 py-4 tabular-nums">{job.application_count ?? 0}</td>
-                  <td className="px-4 py-4">{(job.new_count ?? 0) > 0 ? <span className="inline-flex items-center gap-1.5 font-semibold"><span aria-hidden className="size-2 rounded-full bg-blue-600" />{job.new_count}</span> : <span className="text-muted">0</span>}</td>
+                  <td className="px-4 py-4">{(job.new_count ?? 0) > 0 ? <span className="inline-flex items-center gap-1.5 font-semibold"><span aria-hidden className="size-2 rounded-full bg-blue-400" />{job.new_count}</span> : <span className="text-muted">0</span>}</td>
                   <td className="px-4 py-4 text-muted">{timeAgo(job.created_at)}</td>
                 </tr>
               ))}

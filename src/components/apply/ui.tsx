@@ -9,7 +9,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const LOOK = {
-  primary: "bg-primary text-white hover:bg-primary-hover disabled:bg-border disabled:text-muted",
+  primary: "bg-primary text-ink hover:bg-primary-hover disabled:bg-border disabled:text-muted",
   secondary: "border border-border bg-background text-text hover:bg-surface disabled:text-muted",
   text: "text-primary hover:bg-primary-light disabled:text-muted",
 };
