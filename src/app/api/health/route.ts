@@ -19,5 +19,8 @@ export async function GET() {
   }
 
   const ok = Object.values(settings).every(Boolean) && sessionSecretLongEnough && database === "ok";
-  return NextResponse.json({ ok, settings, sessionSecretLongEnough, database }, { headers: { "cache-control": "no-store" } });
+  // VERCEL_ENV is "production", "preview" or "development" (unset locally). A setting that exists in Vercel but is only
+  // ticked for another environment shows up as false here.
+  const environment = process.env.VERCEL_ENV ?? "local";
+  return NextResponse.json({ ok, environment, settings, sessionSecretLongEnough, database }, { headers: { "cache-control": "no-store" } });
 }

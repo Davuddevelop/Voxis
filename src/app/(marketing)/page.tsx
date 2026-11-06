@@ -1,4 +1,5 @@
 import { AudioLines, BadgeCheck, Eye, Mic, QrCode, TextQuote, UserCheck } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { GrainFrame } from "@/components/landing/GrainFrame";
 import { LinkButton } from "@/components/landing/LinkButton";
 import { Pill } from "@/components/landing/Pill";
@@ -53,7 +54,7 @@ export default function Home() {
     <div id="top" className="mx-auto w-full max-w-[1080px] px-5 md:px-8">
       <header className="flex items-center justify-between py-6">
         <a href="#top" className="inline-flex items-center gap-2.5 font-display text-xl font-medium tracking-[-0.04em]">
-          <span aria-hidden className="h-2 w-3.5 rounded-full bg-accent" />
+          <Logo size={30} decorative />
           Voxis
         </a>
         {/* Only in-page anchors: no link may point to a screen that does not exist yet. */}
@@ -148,7 +149,7 @@ export default function Home() {
       </main>
 
       <footer className="flex flex-col justify-between gap-2 border-t border-ink-high py-10 text-sm text-white/50 md:flex-row">
-        <span className="font-display text-base text-white">Voxis</span>
+        <span className="inline-flex items-center gap-2.5 font-display text-base text-white"><Logo size={22} decorative />Voxis</span>
         <span>Hackathon prototipi · 2026</span>
       </footer>
     </div>
