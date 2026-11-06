@@ -85,3 +85,4 @@ export const createApplication = (application: NewApplication) => rpc<Applicatio
 export const listApplications = (jobId: string) => rpc<ApplicationRow[]>("app_application_list", { p_job_id: jobId });
 export const getApplication = (id: string) => rpc<ApplicationRow | null>("app_application_get", { p_id: id });
 export const setApplicationStatus = (id: string, status: ApplicationStatus) => rpc<ApplicationRow>("app_application_set_status", { p_id: id, p_status: status });
+export const resetDemo = (jobId: string) => rpc<number>("app_demo_reset", { p_job_id: jobId });
