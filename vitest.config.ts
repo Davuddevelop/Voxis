@@ -4,7 +4,10 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   resolve: {
     // Mirror the "@/*" path alias from tsconfig so tests can import "@/lib/...".
-    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "server-only": fileURLToPath(new URL("./src/test/empty.ts", import.meta.url)),
+    },
   },
   test: {
     environment: "node",
