@@ -46,7 +46,10 @@ Hard rules (do not violate, push back if I ask):
 - DB + file storage: Supabase (Postgres + Storage) free tier. Access only from server routes (service key in env, never in the browser).
 - STT: behind an interface `SttProvider { transcribe(audio: Buffer, mime: string): Promise<string> }`.
   Start with ONE provider (decide in M3 after testing 10 real Azerbaijani samples). Swappable later.
-- LLM extraction: Claude API with a strict JSON schema, validated with Zod. Reject and retry once if the JSON is invalid.
+- LLM extraction: Claude API (or Gemini if no Anthropic credits; decided in M4) behind an interface, with a strict
+  JSON schema, validated with Zod. Reject and retry once if the JSON is invalid.
+- Criteria are tied to profile fields ({ field, op, value, importance }). HR's free text is a label only.
+  The LLM never judges whether a criterion is met.
 - Validation: Zod everywhere on API inputs and LLM output.
 - Tests: Vitest for the scoring + validation logic (must-have). Playwright only if time remains.
 - Secrets only in `.env.local` and Vercel env vars. Provide `.env.example`. Never commit secrets.
@@ -85,9 +88,15 @@ POST /api/apply/confirm        confirmed profile -> score -> save application
 GET  /api/hr/applications?jobId=   ranked list (HR only)
 HR auth for the hackathon: single password from env `HR_PASSWORD`, httpOnly cookie. Note this is NOT production auth.
 
-## Pages (IDs refer to the UI spec PDF in docs/)
-Candidate: / (landing), /j/[slug] (C-screens: consent, mic check, question 1..n, review/confirm, done)
-HR: /hr (login), /hr/jobs, /hr/jobs/new, /hr/jobs/[id] (ranked list), /hr/applications/[id] (detail + evidence)
+## Pages (IDs and routes from the UI spec: docs/ui-ux-spec-v1.pdf, section 4)
+Candidate: /v/[kod] (C-01), /v/[kod]/raziliq (C-02), /v/[kod]/mikrofon (C-03), /v/[kod]/sual/[n] (C-04),
+           /v/[kod]/emal (C-06), /v/[kod]/tesdiq (C-07), /v/[kod]/ugurlu (C-08)
+HR: /hr/giris (H-01), /hr/vakansiyalar/[id] (H-06 ranked list), ?namized=[id] (H-07 side panel), H-08 modal
+Hackathon scope = spec section 5 demo flow only. See docs/DECISIONS.md for what is cut.
+
+## Next.js version
+Next.js 16 with cacheComponents. APIs differ from older versions: read node_modules/next/dist/docs/ before
+using a Next.js API you are not sure about.
 
 ## Definition of done for the demo
 A judge scans a QR, records 2-3 answers in Azerbaijani on a phone, confirms the profile, and within seconds the
