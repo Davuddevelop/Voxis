@@ -60,6 +60,7 @@ export default function Home() {
         <nav aria-label="Bölmələr" className="hidden gap-8 text-[13px] text-white/70 md:flex">
           <a href="#nece" className="hover:text-white">Necə işləyir</a>
           <a href="#qaydalar" className="hover:text-white">Qaydalarımız</a>
+          <a href="/hr/giris" className="hover:text-white">HR girişi</a>
         </nav>
         <LinkButton href="#basla">Başlayın</LinkButton>
       </header>
