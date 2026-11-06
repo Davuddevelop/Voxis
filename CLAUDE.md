@@ -60,24 +60,25 @@ jobs(id, slug, title, location, description, questions jsonb, criteria jsonb, st
 applications(id, job_id, audio_path, transcript, profile jsonb, profile_confirmed bool, consent_at,
              score int, breakdown jsonb, status, created_at)
 
-criterion = { id, label, field, op: 'bool_true' | 'number_gte' | 'in_list', value, weight }
-profile (LLM output, Zod-validated) = {
-  full_name, phone, district,
-  experience_years: number | null,
-  relevant_experience: string | null,
-  available_from: string | null,
-  can_work_shifts: boolean | null,
-  can_work_weekends: boolean | null,
-  has_driving_license: boolean | null,
-  languages: string[],
-  salary_expectation: number | null,
-  evidence: Record<fieldName, string>   // short transcript quote per field
+Source of truth: src/lib/schema.ts (Zod). Summary:
+criterion = { id, label, field, op, value?, importance: 'required' | 'preferred' }   // Vacib / Arzuolunan
+  bool_true   on can_work_shifts | can_work_weekends
+  number_gte  on experience_months (value > 0)
+  in_list     on languages (met when ANY candidate language is in value)
+profile (LLM output, Zod-validated), scoring fields = {
+  experience_months: int >= 0 | null, can_work_shifts: bool | null, can_work_weekends: bool | null,
+  languages: ISO 639-1 codes[] | null, evidence: Record<fieldName, string>   // transcript quote per field
 }
-Unknown/unsaid => null. NEVER invent values.
+Display-only fields (full_name, district, ...) are added in M4 and never reach scoring.
+Unknown/unsaid => null (a different fact from 0 / false / []). NEVER invent values.
 
-Scoring: score = round(100 * sum(weights of criteria met) / sum(all weights)).
-null (unknown) counts as NOT met but is shown as "not mentioned" in the breakdown (not as "failed").
-Bands: 75-100 strong, 50-74 possible, 0-49 weak. Breakdown = per-criterion {met, weight, evidence}.
+Scoring (src/lib/scoring.ts; rules and reasons in docs/DECISIONS.md):
+weight: required = 3, preferred = 1. credit = weight if met, weight * ratio if partial, 0 otherwise.
+score = round-half-up(100 * sum(credit) / sum(weights)). Throws on empty criteria or a threshold <= 0.
+Status per criterion (spec section 8): met | partial | not_met | unknown. Only number_gte can be partial:
+ratio = value / threshold; >= 1 met, 0.5 <= ratio < 1 partial, < 0.5 not_met. null => unknown (0 credit,
+shown as "Məlumat yoxdur", never as "Uyğun deyil").
+Bands: 75-100 high, 50-74 medium, 0-49 low. Breakdown = per-criterion {criterionId, status, weight, credit, evidence}.
 
 ## API routes
 POST /api/jobs                 create a job (HR)
