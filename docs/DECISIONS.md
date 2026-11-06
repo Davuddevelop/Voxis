@@ -47,3 +47,35 @@ Format: what we decided · why · what we rejected.
 - **What:** Work on `mN-name`, WIP commits allowed there; at milestone end the owner approves one conventional
   commit message and we squash-merge to `main`.
 - **Why:** The cloud container is ephemeral, so work must be pushed often; `main` still only gets approved commits.
+
+## 2026-11-06 · Scoring rules (M1, decided by the owner)
+- **Demo cashier job:** experience_months >= 6 (required), can_work_shifts (required), can_work_weekends (preferred),
+  languages includes "ru" (preferred).
+- **Weights 3:1** (required:preferred). Checked with 2 required + 2 preferred: at 2:1 a candidate who meets both
+  required and a candidate who misses one required both score 67 (tie); at 3:1 they score 75 vs 63.
+  - *Known limit:* "meets all required beats misses one required" holds only while a job has fewer than 3 preferred
+    criteria (3 preferred: tie, 4+: the candidate missing a required one can win). Accepted for the demo job (2).
+    If it matters later: sort candidates who meet all required first, or scale the ratio by criteria count.
+- **Qismən** only for number_gte: ratio = value/threshold; >= 1 met; 0.5 <= ratio < 1 partial with credit
+  weight * ratio; < 0.5 not met. Depends only on the two values.
+  - *Known cliff:* 2 of 6 months earns 0 but 3 of 6 earns 1.5 points. Accepted: the label (red x vs yellow) matters
+    more to HR than score smoothness.
+- **Unknown (null) = 0 credit, status "unknown"**, shown as "Məlumat yoxdur", never as "Uyğun deyil". Fair only
+  because the candidate confirms the profile on C-07 before scoring.
+- **No criteria / threshold <= 0 => scoreProfile throws.** A silent 0 would rank everyone "low" because of a setup
+  mistake. Zod (2-6 criteria, threshold > 0) rejects these at job creation, so HR gets a form error instead.
+- **Criteria store `importance`, not a numeric weight** (my change, owner may veto): the 3:1 ratio is one constant in
+  code, the UI has two segments, and old applications can be re-scored when the ratio changes.
+- **`languages` is nullable** (my change): null = not mentioned (unknown), non-empty array = what they said. With
+  plain `[]` we could not tell "speaks no Russian" from "did not say".
+- **Rounding is half up** (Math.round): 62.5 -> 63, 87.5 -> 88.
+
+### Follow-ups created by these decisions
+- **M2:** the seed script must validate the demo job with the same `CriteriaSchema` as the HR form.
+- **M2:** each criterion needs a question (spec H-04 warns otherwise). Demo job, 3 questions: Q1 experience,
+  Q2 shifts + weekends, Q3 languages.
+- **M4:** the extraction prompt must define `experience_months` exactly (months of cashier / sales / retail work
+  the candidate states, not total career). This is the one place the LLM makes a judgement.
+- **M5:** the scored fields must all be visible on C-07 (rule: the candidate confirms everything that is scored).
+  The spec's C-07 has no shifts / weekends rows, so add them. And /confirm must save the application BEFORE scoring,
+  so a throw never loses a candidate's answers.
