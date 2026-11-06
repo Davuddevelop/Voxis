@@ -21,10 +21,11 @@
   /* Landing page only (dark). The accent is the spec's teal, lightened to read on near-black.
      The status colours keep their spec meaning but are lightened too: the spec's darker green and red
      fail the contrast rule (WCAG AA) on a dark background. */
-  --color-ink: #080a09;
-  --color-ink-raised: #131517;
-  --color-ink-high: #232326;
-  --color-accent: #5eead4;
+  --color-ink: #070909;
+  --color-ink-raised: #0d1111;
+  --color-ink-high: #2b3132;
+  --color-accent: #67c6bc;
+  --color-paper: #f1f1ed;
   --color-success-on-dark: #3fb950;
   --color-warning-on-dark: #d4b144;
   --color-danger-on-dark: #ff7b72;
@@ -62,7 +63,13 @@ html:has(.landing-root) {
 }
 body:has(.landing-root) {
   background: var(--color-ink);
-  color: #fff;
+  color: var(--color-paper);
+}
+/* On the dark pages "white" means the design's warm off-white. Tailwind's text-white, text-white/50 and bg-white all read
+   --color-white, so redefining it here recolours them without touching a single component. Scoped to the landing:
+   product screens keep real white. */
+.landing-root {
+  --color-white: var(--color-paper);
 }
 .landing-root :focus-visible {
   outline-color: #fff;
