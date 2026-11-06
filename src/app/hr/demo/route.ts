@@ -13,6 +13,8 @@ export async function GET(request: Request) {
   if (!(await checkFixedKey(signingSecret(), "demo-login", url.searchParams.get("k") ?? ""))) return fail(404, "not_found");
 
   await startHrSession();
+  // Default: the two-sided stage screen. "&to=list" opens the ordinary job page instead.
+  if (url.searchParams.get("to") !== "list") return NextResponse.redirect(new URL("/hr/sehne", url));
   const job = await getJob("demo").catch(() => null);
   return NextResponse.redirect(new URL(job ? `/hr/vakansiyalar/${job.id}` : "/hr/vakansiyalar", url));
 }

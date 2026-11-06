@@ -3,7 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
-export function LoginForm() {
+export function LoginForm({ next = "/hr/vakansiyalar" }: { next?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +16,7 @@ export function LoginForm() {
     setBusy(true);
     setError(null);
     const response = await fetch("/api/hr/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) }).catch(() => null);
-    if (response?.ok) return router.push("/hr/vakansiyalar");
+    if (response?.ok) return router.push(next);
     setError(response?.status === 429 ? "Çox cəhd oldu. Bir az gözləyin." : response ? "E-poçt və ya şifrə yanlışdır." : "Bağlantı yoxdur. Yenidən cəhd edin.");
     setBusy(false);
   }

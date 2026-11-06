@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { AudioLines, BadgeCheck, Eye, Mic, QrCode, TextQuote, UserCheck } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { GrainFrame } from "@/components/landing/GrainFrame";
@@ -47,6 +48,9 @@ const PRINCIPLES = [
   },
 ];
 
+// Staggers the entrance of a group: each element waits a little longer than the one before.
+const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+
 const h2 = "text-balance font-display text-4xl font-medium leading-[1.08] tracking-[-0.04em] md:text-[2.5rem]";
 
 export default function Home() {
@@ -63,43 +67,46 @@ export default function Home() {
           <a href="#qaydalar" className="hover:text-white">Qaydalarımız</a>
           <a href="/hr/giris" className="hover:text-white">HR girişi</a>
         </nav>
-        <LinkButton href="#basla">Başlayın</LinkButton>
+        <LinkButton href="/baslayin">Başlayın</LinkButton>
       </header>
 
       <main>
         <section aria-labelledby="hero-title" className="relative pb-24 pt-16 md:pt-24">
           <div aria-hidden className="dots pointer-events-none absolute inset-x-0 top-0 -z-10 h-[640px]" />
           <div className="mx-auto max-w-[920px]">
-            <Pill>Səsli müraciət platforması</Pill>
+            <div className="rise"><Pill>Səsli müraciət platforması</Pill></div>
             <h1
               id="hero-title"
-              className="mt-8 font-display text-[clamp(2.5rem,7vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.045em]"
+              style={delay(120)}
+              className="rise mt-8 font-display text-[clamp(2.5rem,7vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.045em]"
             >
               <span className="block">CV lazım deyil.</span>
               <span className="block">Sadəcə danışın.</span>
             </h1>
-            <p className="mt-8 max-w-[560px] text-base leading-7 tracking-[-0.02em] text-white/70">
+            <p style={delay(260)} className="rise mt-8 max-w-[560px] text-base leading-7 tracking-[-0.02em] text-white/70">
               Namizəd telefonla QR kodu skan edir və suallara öz səsi ilə cavab verir. Sistem cavabları yazıya
               çevirir, HR isə namizədləri uyğunluğa görə sıralanmış və hər balı izah olunmuş siyahıda görür.
             </p>
-            <Pill tone="accent" className="mt-8">Müraciət pulsuzdur · CV tələb olunmur</Pill>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <LinkButton href="#nece">Necə işləyir</LinkButton>
-              <LinkButton href="#qaydalar" variant="secondary">Qaydalarımız</LinkButton>
+            <div style={delay(380)} className="rise mt-8"><Pill tone="accent">Müraciət pulsuzdur · CV tələb olunmur</Pill></div>
+            <div style={delay(480)} className="rise mt-5 flex flex-wrap gap-2">
+              <LinkButton href="/baslayin">Başlayın</LinkButton>
+              <LinkButton href="#nece" variant="secondary">Necə işləyir</LinkButton>
             </div>
 
-            <GrainFrame className="mt-16 p-3 sm:p-6 md:mt-24 md:p-14">
-              <ScoreSpecimen />
-            </GrainFrame>
+            <div style={delay(640)} className="rise">
+              <GrainFrame className="mt-16 p-3 sm:p-6 md:mt-24 md:p-14">
+                <ScoreSpecimen />
+              </GrainFrame>
+            </div>
           </div>
         </section>
 
         <section id="nece" aria-labelledby="nece-title" className="scroll-mt-4 py-24">
           <Pill>Namizəd üçün</Pill>
-          <h2 id="nece-title" className={`${h2} mt-6 max-w-[16ch]`}>Üç addım, təxminən iki dəqiqə.</h2>
+          <h2 id="nece-title" className={`${h2} reveal mt-6 max-w-[16ch]`}>Üç addım, təxminən iki dəqiqə.</h2>
           <ol className="mt-14 grid gap-3 md:grid-cols-3">
             {STEPS.map(({ Icon, title, body }, i) => (
-              <li key={title} className="flex flex-col rounded-xl bg-ink-raised p-6 md:min-h-[260px]">
+              <li key={title} className="reveal flex flex-col rounded-xl bg-ink-raised p-6 md:min-h-[260px]">
                 <Icon aria-hidden className="size-7 text-white/50" strokeWidth={1.5} />
                 <span className="mt-10 text-xs tabular-nums text-white/40 md:mt-auto">0{i + 1}</span>
                 <h3 className="mt-2 font-display text-xl font-medium tracking-[-0.03em]">{title}</h3>
@@ -112,12 +119,12 @@ export default function Home() {
 
         <section id="qaydalar" aria-labelledby="qaydalar-title" className="scroll-mt-4 py-24">
           <Pill>Qaydalarımız</Pill>
-          <h2 id="qaydalar-title" className={`${h2} mt-6 max-w-[20ch]`}>
+          <h2 id="qaydalar-title" className={`${h2} reveal mt-6 max-w-[20ch]`}>
             Hesablama sadə koddur, qərar insanındır.
           </h2>
           <ul className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {PRINCIPLES.map(({ Icon, label, body }) => (
-              <li key={label} className="flex flex-col rounded-xl bg-ink-raised p-6 lg:min-h-[280px]">
+              <li key={label} className="reveal flex flex-col rounded-xl bg-ink-raised p-6 lg:min-h-[280px]">
                 <Icon aria-hidden className="size-8 text-white/40" strokeWidth={1.25} />
                 <h3 className="mt-10 text-xs uppercase tracking-[0.08em] text-white/90 lg:mt-auto">{label}</h3>
                 {/* min-h = 5 lines (the longest body), so the labels line up across the four tiles. */}
@@ -137,9 +144,9 @@ export default function Home() {
                 Vakansiyanın QR kodunu skan edin və səslə müraciət edin. HR panelində namizədlər uyğunluğa görə
                 sıralanır və hər bal izah olunur.
               </p>
-              <p className="mt-6 text-sm text-white/50">Demo üçün vakansiyanın QR kodunu skan edin.</p>
+              <div className="mt-8"><LinkButton href="/baslayin">Başlayın</LinkButton></div>
             </div>
-            <GrainFrame className="grid min-h-[280px] place-items-center md:col-span-2">
+            <GrainFrame className="reveal grid min-h-[280px] place-items-center md:col-span-2">
               <div className="rounded-xl bg-ink p-5">
                 <QrCode aria-hidden className="size-20 text-white" strokeWidth={1} />
               </div>

@@ -180,3 +180,19 @@ Format: what we decided · why · what we rejected.
 - **Also for the stage:** a seeded job at /v/demo with 2 questions (about 20 s to answer) and 3 sample candidates (named
   "(nümunə)", scored by the real scoreProfile), a job page that refreshes itself every 4 s, a full-screen QR page, and
   HR's priorities shown on the job page. Script and checklist: docs/DEMO.md. Seeding: `npm run seed:demo`.
+
+## Stage screen: one page that shows both sides (`/hr/sehne`)
+- **Asked for:** during the pitch, show the candidate applying AND the result on HR's list, without switching devices or tabs.
+- **Done:** `/hr/sehne` puts two ordinary pages in iframes: `/v/demo` in a phone frame (left) and `/hr/embed/<id>` (right, the same
+  `JobBoard` as the normal job page, in an `embedded` mode: no navigation away, no QR block, refreshes every 2 s instead of 4 s).
+  Nothing is simulated: the left side is the real candidate flow, the right side reads the real database. The new row appears about
+  2 s after "Bitir" and flashes once (`.new-row`).
+- **Why iframes, not one component:** the candidate flow and the HR list are separate pages with their own state; an iframe keeps
+  them separate, and both are on the same address, so the HR login cookie is shared. The phone frame needs `allow="microphone"`,
+  otherwise a browser may refuse recording inside a frame.
+- **Alternative rejected:** a real push channel (WebSocket / Supabase Realtime). More moving parts and one more thing that can fail
+  on stage; polling every 2 s is invisible to the audience and has no failure mode beyond "a bit later".
+- **Role chooser:** `/baslayin` ("Siz kimsiniz?") offers candidate or HR. HR goes through the login (`?next=` is checked by
+  `safeNext`, so a crafted link cannot send the presenter to another site). The private link `/hr/demo?k=KEY` now lands on the stage screen.
+- **Reset button ("Sıfırla"):** deletes the applications added while rehearsing, keeps the three "(nümunə)" samples. The database
+  function (`app_demo_reset`, migration 0002) refuses any job whose slug is not "demo", so it cannot wipe a real job's applicants.

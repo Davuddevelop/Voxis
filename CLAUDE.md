@@ -80,9 +80,13 @@ band, breakdown, status, created_at).
 ## Routes
 Candidate (one page, state machine): /v/[kod]
 HR: /hr/giris (login), /hr/vakansiyalar (list), /hr/vakansiyalar/yeni (create), /hr/vakansiyalar/[id] (QR + link +
-ranked list; ?namized=[id] opens the side panel). Landing page: / (own layout, dark theme).
+ranked list; ?namized=[id] opens the side panel; the list is rendered by components/hr/JobBoard.tsx).
+Landing page: / (own layout, dark theme); /baslayin = role chooser (candidate or HR). Stage screen: /hr/sehne (candidate phone
++ live HR list side by side, two iframes), /hr/embed/[id] (the HR list without page chrome, used by the stage screen),
+/hr/demo?k=KEY (private one-tap login, lands on /hr/sehne), /hr/qr/[id] (full-screen QR).
 API: POST /api/apply/transcribe, /api/apply/extract, /api/apply/confirm (public, rate-limited, validated);
-POST /api/hr/login, /api/hr/logout, /api/hr/jobs, /api/hr/jobs/[id]/status, /api/hr/applications/[id]/status (HR cookie).
+POST /api/hr/login, /api/hr/logout, /api/hr/jobs, /api/hr/jobs/[id]/status, /api/hr/applications/[id]/status,
+/api/hr/demo/reset (HR cookie; the reset only works on the job whose slug is "demo").
 
 ## Definition of done for the demo
 A judge scans a QR, records 2-3 answers in Azerbaijani on a phone, confirms the profile, and within seconds the

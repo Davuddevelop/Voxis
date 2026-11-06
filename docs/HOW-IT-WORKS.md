@@ -40,7 +40,8 @@ exists to make that safe (evidence quotes, candidate confirmation, signed token)
 | Database | `src/lib/db.ts`, `supabase/migrations/0001_init.sql` | Only way to touch data; functions demand a server secret |
 | HR login | `src/lib/hr-auth.ts` | Demo account, signed httpOnly cookie |
 | Candidate UI | `src/components/apply/` | `ApplyFlow` (state machine), `useRecorder`, `audio.ts` (WAV), `ProfileForm` |
-| HR UI | `src/components/hr/`, `src/app/hr/` | Login, job form, QR page, ranked table, side panel, decisions |
+| HR UI | `src/components/hr/`, `src/app/hr/` | Login, job form, QR page, ranked table (`JobBoard`), side panel, decisions |
+| Stage screen | `src/app/hr/sehne/page.tsx`, `src/app/hr/embed/[id]/page.tsx` | Candidate phone and live HR list on one screen (two iframes) |
 | Landing | `src/app/(marketing)/`, `src/components/landing/` | The dark page at `/` |
 
 ## 3. Follow one answer through the system
@@ -54,7 +55,7 @@ exists to make that safe (evidence quotes, candidate confirmation, signed token)
 4. **Confirm** (`ProfileForm`): the candidate sees each fact with "Siz dediniz: “...”" and can change it.
 5. **Score** (`api/apply/confirm`): verifies the token, works out which fields were edited, runs `scoreProfile()` with the
    job's criteria, saves the application. The candidate gets only "ok".
-6. **HR** (`vakansiyalar/[id]/page.tsx`): the database returns applications best-first; the panel shows each criterion's
+6. **HR** (`components/hr/JobBoard.tsx`, shown by `vakansiyalar/[id]/page.tsx`): the database returns applications best-first; the panel shows each criterion's
    chip, the priority, and the quote (or "Namizəd düzəldib").
 
 ## 4. Where each hard rule lives
