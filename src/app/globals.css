@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Design tokens from the UI spec, section 9. Use as bg-primary, text-muted, etc.
+   Colour meanings are fixed by the spec (e.g. warning = "Qismən" / last 10 seconds). */
+@theme {
+  --color-primary: #0f766e;
+  --color-primary-hover: #115e59;
+  --color-primary-light: #e6f2f1;
+  --color-text: #1f2328;
+  --color-muted: #5b6470;
+  --color-border: #d8dee4;
+  --color-surface: #f6f8fa;
+  --color-background: #ffffff;
+  --color-success: #1a7f37;
+  --color-warning: #9a6700;
+  --color-danger: #cf222e;
+  --color-neutral: #6e7781;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+}
